@@ -1,5 +1,4 @@
 #[cfg(test)]
-
 use super::List;
 use crate::traits::List as _;
 

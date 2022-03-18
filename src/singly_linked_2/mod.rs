@@ -3,6 +3,8 @@ use std::fmt::Debug;
 use std::mem;
 use std::rc::Rc;
 
+use crate::traits::List as _;
+
 mod tests;
 
 #[derive(Debug)]
@@ -26,7 +28,13 @@ impl ListUtils {
     }
 }
 
-impl<T> super::traits::List<T> for List<T> {
+impl<T> Default for List<T> {
+    fn default() -> Self {
+        List::new()
+    }
+}
+
+impl<T> crate::traits::List<T> for List<T> {
     fn new() -> Self {
         List {
             maybe_head: None,
@@ -68,8 +76,8 @@ impl<T> super::traits::List<T> for List<T> {
                     maybe_next: next_rc,
                 }));
                 borrowed_node.maybe_next = Some(new_node);
-                    self.length += 1;
-                    return Ok(());
+                self.length += 1;
+                return Ok(());
             } else {
                 opt.replace(Rc::clone(maybe_next.as_ref().unwrap()));
                 countdown -= 1;
@@ -140,7 +148,8 @@ impl<T> super::traits::List<T> for List<T> {
             return Some(ListUtils::unpack(head).value);
         }
 
-        let mut opt: Option<Rc<RefCell<Node<T>>>> = Some(Rc::clone(self.maybe_head.as_ref().unwrap()));
+        let mut opt: Option<Rc<RefCell<Node<T>>>> =
+            Some(Rc::clone(self.maybe_head.as_ref().unwrap()));
         let mut rc: Rc<RefCell<Node<T>>>;
 
         loop {
@@ -148,7 +157,7 @@ impl<T> super::traits::List<T> for List<T> {
             let mut borrowed_node = RefCell::borrow_mut(&rc);
             let maybe_next = &mut borrowed_node.maybe_next;
             let next_rc = maybe_next.as_ref().unwrap();
-            
+
             if std::ptr::eq(
                 maybe_next.as_ref().unwrap().as_ptr(),
                 self.maybe_tail.as_ref().unwrap().as_ptr(),
@@ -172,7 +181,8 @@ impl<T> super::traits::List<T> for List<T> {
             return None;
         }
 
-        let mut opt: Option<Rc<RefCell<Node<T>>>> = Some(Rc::clone(self.maybe_head.as_ref().unwrap()));
+        let mut opt: Option<Rc<RefCell<Node<T>>>> =
+            Some(Rc::clone(self.maybe_head.as_ref().unwrap()));
         let mut rc: Rc<RefCell<Node<T>>>;
         let mut countdown_to_preceding = index as i32 - 1;
 

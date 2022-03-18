@@ -1,5 +1,6 @@
-use super::traits::List as _;
 use std::mem;
+
+use super::traits::List as _;
 
 mod tests;
 
@@ -48,15 +49,15 @@ impl<T> super::traits::List<T> for List<T> {
     fn put_first(&mut self, t: T) -> &mut Self {
         let new_node = Box::new(Node {
             value: t,
-            maybe_next: mem::replace(&mut self.maybe_contents, None),
+            maybe_next: self.maybe_contents.take(),
         });
-        self.maybe_contents = Some(new_node);
+        self.maybe_contents.replace(new_node);
         self
     }
 
     /// Remove and return the value at list position 0 (or None if the list is empty).
     fn remove_first(&mut self) -> Option<T> {
-        match mem::replace(&mut self.maybe_contents, None) {
+        match self.maybe_contents.take() {
             None => None,
             Some(boxed_node) => {
                 self.maybe_contents = boxed_node.maybe_next;
@@ -76,7 +77,7 @@ impl<T> super::traits::List<T> for List<T> {
                     return None;
                 }
                 Some(_) if current_index == index => {
-                    let grab_node = mem::replace(maybe_boxed_node, None).unwrap();
+                    let grab_node = maybe_boxed_node.take().unwrap();
                     mem::replace(maybe_boxed_node, grab_node.maybe_next);
                     return Some(grab_node.value);
                 }
@@ -95,25 +96,21 @@ impl<T> super::traits::List<T> for List<T> {
         loop {
             match maybe_boxed_node {
                 _ if current_index == index => {
-                    let grab_node = mem::replace(maybe_boxed_node, None);
+                    let grab_node = maybe_boxed_node.take();
                     let new_node: Option<Box<Node<T>>> = Some(Box::new(Node {
                         value: t,
-                        maybe_next: if grab_node.is_some() {
-                            Some(grab_node.unwrap())
-                        } else {
-                            None
-                        },
+                        maybe_next: grab_node,
                     }));
                     mem::replace(maybe_boxed_node, new_node);
                     return Ok(());
-                },
+                }
                 Some(boxed_node) => {
                     maybe_boxed_node = &mut boxed_node.maybe_next;
                     current_index += 1;
-                },
+                }
                 None => {
                     return Err(t);
-                },
+                }
             }
         }
     }
@@ -130,12 +127,12 @@ impl<T> super::traits::List<T> for List<T> {
                     return Result::Err(t);
                 }
                 Some(_) if current_index == index => {
-                    let grab_node = mem::replace(maybe_boxed_node, None).unwrap();
+                    let grab_node = maybe_boxed_node.take().unwrap();
                     let replacement_node = Node {
                         value: t,
                         maybe_next: grab_node.maybe_next,
                     };
-                    mem::replace(maybe_boxed_node, Some(Box::new(replacement_node)));
+                    maybe_boxed_node.replace(Box::new(replacement_node));
                     return Ok(grab_node.value);
                 }
                 Some(boxed_node) => {
@@ -159,7 +156,7 @@ impl<T> super::traits::List<T> for List<T> {
                     return None;
                 }
                 Some(boxed_value) if pred(&boxed_value.value) => {
-                    let grab_node = mem::replace(maybe_boxed_node, None).unwrap();
+                    let grab_node = maybe_boxed_node.take().unwrap();
                     mem::replace(maybe_boxed_node, grab_node.maybe_next);
                     return Some(grab_node.value);
                 }
@@ -205,7 +202,7 @@ impl<T> super::traits::List<T> for List<T> {
                     return None;
                 }
                 Some(boxed_node) if boxed_node.maybe_next.is_none() => {
-                    let grab_last_node = mem::replace(maybe_boxed_node, None);
+                    let grab_last_node = maybe_boxed_node.take();
                     return Some(grab_last_node.unwrap().value);
                 }
                 Some(boxed_node) => {
