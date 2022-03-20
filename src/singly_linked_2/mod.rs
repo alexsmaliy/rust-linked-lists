@@ -34,6 +34,16 @@ impl<T> Default for List<T> {
     }
 }
 
+impl<T> Drop for List<T> {
+    fn drop(&mut self) {
+        self.maybe_tail.take();
+        let mut dropme = self.maybe_head.take();
+        while let Some(moo) = dropme {
+            dropme = moo.borrow_mut().maybe_next.take();
+        }
+    }
+}
+
 impl<T> crate::traits::List<T> for List<T> {
     fn new() -> Self {
         List {

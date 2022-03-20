@@ -21,6 +21,15 @@ impl<T> Default for List<T> {
     }
 }
 
+impl<T> Drop for List<T> {
+    fn drop(&mut self) {
+        let mut dropme = self.maybe_contents.take();
+        while let Some(mut moo) = dropme {
+            dropme = moo.maybe_next.take();
+        }
+    }
+}
+
 impl<T> super::traits::List<T> for List<T> {
     /// Make a new empty list.
     fn new() -> Self {

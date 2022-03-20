@@ -3,6 +3,16 @@ use super::List;
 use crate::traits::List as _;
 
 #[test]
+fn append_scale_test() {
+    let mut list: List<u32> = List::new();
+    for i in 0..=1_000_000 {
+        list.put_first(i);
+    }
+    println!("List length: {}", list.length());
+    drop(list);
+}
+
+#[test]
 fn append_remove_test1() {
     let mut list: List<u16> = List::new();
     list.put_first(1).put_first(2).put_first(3);

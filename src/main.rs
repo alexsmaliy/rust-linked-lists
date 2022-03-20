@@ -4,6 +4,7 @@
 mod nqueens;
 mod singly_linked_1;
 mod singly_linked_2;
+mod doubly_linked_1;
 mod traits;
 
 use singly_linked_1::List;
