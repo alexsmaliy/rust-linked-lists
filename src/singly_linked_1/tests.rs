@@ -1,5 +1,6 @@
 #[cfg(test)]
 use super::List;
+#[allow(unused_imports)]
 use crate::traits::List as _;
 
 #[test]
@@ -50,6 +51,7 @@ fn append_remove_test3() {
 }
 
 #[test]
+#[allow(unused_must_use)]
 fn insert_at_test() {
     let mut list: List<u16> = List::new();
     assert!(list.insert_at(5, 0).is_err());
@@ -101,6 +103,7 @@ fn remove_nth_test() {
 }
 
 #[test]
+#[allow(unused_must_use)]
 fn replace_nth_test() {
     let mut list: List<u32> = List::new();
     for i in 0..=8 {
@@ -126,4 +129,50 @@ fn length_test() {
         list.remove_last();
     }
     assert_eq!(list.length(), 0);
+}
+
+#[test]
+fn index_test() {
+    let mut list: List<String> = List::new();
+    for i in 0..=20 as usize {
+        list.put_first((20 - i).to_string());
+    }
+    for i in 0..=20 as usize {
+        assert_eq!(*&list[i], i.to_string());
+    }
+}
+
+#[test]
+#[should_panic]
+#[allow(unused_must_use)]
+fn index_oob_test() {
+    let mut list: List<String> = List::new();
+    for i in 0..=20 as usize {
+        list.put_first((20 - i).to_string());
+    }
+    &list[21];
+}
+
+#[test]
+fn index_mut_test() {
+    let mut list: List<String> = List::new();
+    for i in 0..=20 as usize {
+        list.put_first((20 - i).to_string());
+    }
+    for i in 0..=20 as usize {
+        list[i].push_str("moo");
+    }
+    for i in 0..=20 as usize {
+        assert_eq!(*&list[i], format!("{}moo", i));
+    }
+}
+
+#[test]
+#[should_panic]
+fn index_mut_oob_test() {
+    let mut list: List<String> = List::new();
+    for i in 0..=20 as usize {
+        list.put_first((20 - i).to_string());
+    }
+    list[21] = "bah".to_string();
 }

@@ -1,6 +1,8 @@
-pub trait List<T> {
+pub trait List<'a, T> {
     fn new() -> Self;
     fn length(&self) -> usize;
+    fn get(&'a self, ind: usize) -> &'a T;
+    fn get_mut(&'a mut self, ind: usize) -> &'a mut T;
     fn insert_at(&mut self, index: usize, t: T) -> Result<(), T>;
     fn put_first(&mut self, t: T) -> &mut Self;
     fn put_last(&mut self, t: T) -> &mut Self;

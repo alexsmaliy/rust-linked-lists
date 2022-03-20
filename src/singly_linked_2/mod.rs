@@ -44,7 +44,7 @@ impl<T> Drop for List<T> {
     }
 }
 
-impl<T> crate::traits::List<T> for List<T> {
+impl<'a, T> crate::traits::List<'a, T> for List<T> {
     fn new() -> Self {
         List {
             maybe_head: None,
@@ -55,6 +55,14 @@ impl<T> crate::traits::List<T> for List<T> {
 
     fn length(&self) -> usize {
         self.length
+    }
+
+    fn get(&'a self, ind: usize) -> &'a T {
+        todo!()
+    }
+
+    fn get_mut(&'a mut self, ind: usize) -> &'a mut T {
+        todo!()
     }
 
     fn insert_at(&mut self, index: usize, t: T) -> Result<(), T> {

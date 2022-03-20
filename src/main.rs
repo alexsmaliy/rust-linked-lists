@@ -11,6 +11,15 @@ use singly_linked_1::List;
 use traits::List as _;
 
 fn main() {
+    let mut list: List<String> = List::new();
+    for i in 0..=20 as usize {
+        list.put_first((20 - i).to_string());
+    }
+    println!("{}", &list[0]);
+    // let mut lll: singly_linked_1::List<i32> = List::new();
+    // let x = &mut lll;
+    // let y = lll.get(5);
+    // let z = lll.get_mut(5);
     // nqueens::nqueens::<8>();
 
     // let mut list: List<i8> = List::new();
@@ -46,8 +55,8 @@ fn main() {
     // println!("Removed {removed:?} -- List({length:}): {list:?}", removed = x, length = list.length(), list = list);
     // x = list.remove_last();
     // println!("Removed {removed:?} -- List({length:}): {list:?}", removed = x, length = list.length(), list = list);
-    let mut list = singly_linked_2::List::<i8>::new();
-    list.put_first(3).put_first(2).put_first(1).put_first(0);
+    // let mut list = singly_linked_2::List::<i8>::new();
+    // list.put_first(3).put_first(2).put_first(1).put_first(0);
     // let x = list.remove_last().unwrap();
     // println!("Removed {removed:?} -- List({length:}): {list:?}", removed = x, length = list.length(), list = list);
     // let x = list.remove_nth(1).unwrap();
@@ -61,11 +70,11 @@ fn main() {
     // println!("Removed {removed:?} -- List({length:}): {list:?}", removed = x, length = list.length(), list = list);
     // let x = list.remove_last();
     // println!("Removed {removed:?} -- List({length:}): {list:?}", removed = x, length = list.length(), list = list);
-    let x = list.insert_at(4, 99);
-    println!(
-        "Removed {removed:?} -- List({length:}): {list:?}",
-        removed = x,
-        length = list.length(),
-        list = list
-    );
+    // let x = list.insert_at(4, 99);
+    // println!(
+    //     "Removed {removed:?} -- List({length:}): {list:?}",
+    //     removed = x,
+    //     length = list.length(),
+    //     list = list
+    // );
 }
